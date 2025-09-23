@@ -33,35 +33,46 @@ public class CommerceSystem {
 
         System.out.println("0. 종료   |   프로그램 종료");
         String next = sc.nextLine();
-
-        if ("1".equals(next)) {
-            Category c1 = categories.get(0);
-            i=0;
-            for(Product p : c1.products) {
-                System.out.println((i+1)+". " + p);
-                i++;
-            }
-        }else if ("2".equals(next)) {
-            Category c2 = categories.get(1);
-            i=0;
-            for(Product p : c2.products) {
-                System.out.println((i+1)+". " + p);
-                i++;
-            }
-        }else if ("3".equals(next)) {
-            Category c3 = categories.get(2);
-            i=0;
-            for(Product p : c3.products) {
-                System.out.println((i+1)+". " + p);
-                i++;
-            }
-        }
-
-
         if(next.equals("0")) {
             System.out.println("커머스 플랫폼을 종료합니다.");
             sc.close();
             System.exit(0);
+        }else{
+            if ("1".equals(next)) {
+                Category c1 = categories.get(0);
+                i=0;
+                for(Product p : c1.products) {
+                    System.out.println((i+1)+". " + p);
+                    i++;
+                }
+                System.out.println("0. 뒤로가기");
+                back();
+
+            }else if ("2".equals(next)) {
+                Category c2 = categories.get(1);
+                i=0;
+                for(Product p : c2.products) {
+                    System.out.println((i+1)+". " + p);
+                    i++;
+                }
+                System.out.println("0. 뒤로가기");
+
+            }else if ("3".equals(next)) {
+                Category c3 = categories.get(2);
+                i=0;
+                for(Product p : c3.products) {
+                    System.out.println((i+1)+". " + p);
+                    i++;
+                }
+                System.out.println("0. 뒤로가기");
+            }
         }
+    }
+    void back(){
+        String next = sc.nextLine();
+        if(next.equals("0")) {
+            start();
+        }
+
     }
 }
