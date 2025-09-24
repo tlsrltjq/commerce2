@@ -2,11 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
-    String name;
-    String price;
-    String exp;
-    int stock;
-
+    private String name;
+    private String price;
+    private String exp;
+    private int stock;
 
     Product(String name, String price, String exp, int stock) {
         this.name = name;
@@ -20,4 +19,10 @@ public class Product {
         return name + " | " + price + " | " + exp;
     }
 
+    public String getName() { return name; }
+    public String getPrice() { return price; }
+    public String getExp() { return exp; }
+    public int getStock() { return stock; }
+
+    public void setStock(int stock) { this.stock = stock; }
 }
