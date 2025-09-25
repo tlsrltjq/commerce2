@@ -6,8 +6,15 @@ public class CartItem {
         this.product = product;
         this.quantity = quantity;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
     @Override
     public String toString() {
-        return product.toString() + " | " + quantity + "개";
+        return product.toString() + " | 수량: " + quantity + "개";
     }
 }
