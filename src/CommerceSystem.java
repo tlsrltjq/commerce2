@@ -167,6 +167,16 @@ public class CommerceSystem {
         return totalPrice;
     }
 
+    public void setStock() {
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            int quantity = item.getQuantity();
+            int stock = product.getStock()-quantity;
+            System.out.println(product.getName() +" 재고가 " + product.getStock() + "개 → " + stock + "개로 업데이트되었습니다.");
+            product.setStock(stock);
+        }
+    }
+
     public void order() {
         while (true) {
             System.out.println("아래와 같이 주문 하시겠습니까?");
@@ -180,6 +190,7 @@ public class CommerceSystem {
             int num = numInput();
             if (num == 1) {
                 System.out.println("주문이 완료되었습니다! 총 금액: " + total + "원");
+                setStock();
                 cartItems.clear();
                 return;
             } else if (num == 2) {
