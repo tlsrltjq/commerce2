@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Product {
     private String name;
     private String price;
@@ -21,7 +18,6 @@ public class Product {
 
     public String getName() { return name; }
     public String getPrice() { return price; }
-    public String getExp() { return exp; }
     public int getStock() { return stock; }
 
     public void setStock(int stock) { this.stock = stock; }

@@ -10,10 +10,7 @@ public class Category {
     }
 
     public String getName(){ return categoryName; }
-
     public List<Product> getProducts() { return products; }
-
-
 }
 
 
