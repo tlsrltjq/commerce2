@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class CommerceSystem {
     private List<Category> categories = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
     Scanner sc = new Scanner(System.in);
 
     public CommerceSystem() {
@@ -27,48 +28,13 @@ public class CommerceSystem {
 
     public void start() {
         while (true) {
-            int i = 0;
-            System.out.println("[ 실시간 커머스 플랫폼 메인 ]");
-            for (Category c : categories) {
-                System.out.println((i + 1) + ". " + c.getName());
-                i++;
-            }
-            System.out.println("0. 종료   |   프로그램 종료");
-
-            int pNum = firstInput();
-            if (pNum == 0) {
-                System.out.println("커머스 플랫폼을 종료합니다.");
-                sc.close();
-                System.exit(0);
-            } else {
-                switch (pNum) {
-                    case 1:
-                        int index = pNum - 1;
-                        productList(index);
-                        int pNum2 = secondInput();
-
-                        if (pNum2 == 0) continue;
-                        else selectProduct(categories.get(index), pNum2);
-                        break;
-
-                    case 2, 3:
-                        index = pNum - 1;
-                        productList(index);
-                        pNum2 = secondInput();
-
-                        if (pNum2 == 0) continue;
-                        else selectProduct(categories.get(index), pNum2);
-                        break;
-
-                    default:
-                        System.out.println("보기에 있는 숫자 중에 눌러주세요");
-                }
-            }
+            commerceMainMenu();
         }
+
     }
 
     public void productList(int i) {
-        System.out.println("[ " + categories.get(i).categoryName + " 카테고리 ]");
+        System.out.println("\n[ " + categories.get(i).getName() + " 카테고리 ]");
         int j = 1;
         for (Product p : categories.get(i).getProducts()) {
             System.out.println(j + ". " + p);
@@ -88,31 +54,151 @@ public class CommerceSystem {
         Product select = category.getProducts().get(index);
         System.out.println("선택한 상품 : " + select + " | 남은 재고: " + select.getStock() + "개");
         System.out.println("");
+
+        confirmAddToCart(select);
     }
 
-    public int firstInput() {
+    public int numInput() {
         try {
+            System.out.print(":");
             int pNum = sc.nextInt();
             sc.nextLine();
             return pNum;
         } catch (InputMismatchException e) {
             System.err.println("숫자만 입력해야 합니다. 잘못된 입력입니다.");
             sc.nextLine();
-            return firstInput();
+            return numInput();
         }
     }
 
-    public int secondInput() {
+    public boolean confirmAddToCart(Product product) {
         while (true) {
+            System.out.println(product);
+            System.out.println("위 상품을 장바구니에 추가하시겠습니까?");
+            System.out.println("1. 확인       2. 취소");
+            System.out.print(":");
             try {
-                int pNum2 = sc.nextInt();
+                int pNum3 = sc.nextInt();
                 sc.nextLine();
-                return pNum2;
+                if (pNum3 == 1) {
+                    cartItems.add(new CartItem(product, 1));
+
+                    System.out.println(product.getName() + "이(가) 장바구니에 추가되었습니다.");
+                    return true;
+                } else if (pNum3 == 2) {
+                    return false;
+                } else {
+                    System.out.println("보기에 숫자를 입력해주세요.");
+                }
             } catch (InputMismatchException e) {
                 System.err.println("숫자만 입력해야 합니다. 잘못된 입력입니다.");
                 sc.nextLine();
-                return secondInput();
+                return confirmAddToCart(product);
             }
         }
     }
-}
+
+    public void cartItemList() {
+        System.out.println("[ 장바구니 내역 ]");
+        int i = 1;
+        for (CartItem item : cartItems) {
+            System.out.println(i + ". " + item);
+            i++;
+        }
+
+
+    }
+
+    public void orderManagement() {
+        System.out.println("\n[ 주문 관리 ]");
+        System.out.println("4. 장바구니 확인    | 장바구니를 확인 후 주문합니다.");
+        System.out.println("5. 주문 취소       | 진행중인 주문을 취소합니다(장바구니 초기화)");
+    }
+
+    public void commerceMainMenu() {
+        int i = 0;
+        System.out.println("\n[ 실시간 커머스 플랫폼 메인 ]");
+        for (Category c : categories) {
+            System.out.println((i + 1) + ". " + c.getName());
+            i++;
+        }
+        System.out.println("0. 종료   |   프로그램 종료");
+
+        if (cartItems.size() > 0) {
+            orderManagement();
+        }
+
+        int pNum = numInput();
+        if (pNum == 0) {
+            System.out.println("커머스 플랫폼을 종료합니다.");
+            sc.close();
+            System.exit(0);
+        } else {
+            switch (pNum) {
+                case 1, 2, 3:
+                    int index = pNum - 1;
+                    productList(index);
+                    int pNum2 = numInput();
+
+                    if (pNum2 == 0) commerceMainMenu();
+                    else selectProduct(categories.get(index), pNum2);
+                    break;
+                case 4:
+                    order();
+                    break;
+                case 5:
+                    cartItems.clear();
+                    break;
+                default:
+                    System.out.println("보기에 있는 숫자 중에 눌러주세요");
+            }
+        }
+    }
+
+    public long total() {
+        long totalPrice  = 0;
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            int quantity = item.getQuantity();
+            String clearPrice = product.getPrice().replaceAll("[^0-9]", "");
+            long price = Long.parseLong(clearPrice);
+            totalPrice += price * quantity;
+        }
+        return totalPrice;
+    }
+
+    public void setStock() {
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            int quantity = item.getQuantity();
+            int stock = product.getStock()-quantity;
+            System.out.println(product.getName() +" 재고가 " + product.getStock() + "개 → " + stock + "개로 업데이트되었습니다.");
+            product.setStock(stock);
+        }
+    }
+
+    public void order() {
+        while (true) {
+            System.out.println("아래와 같이 주문 하시겠습니까?");
+            cartItemList();
+
+            System.out.println("\n[ 총 주문 금액 ]");
+            long total = total();
+            System.out.println(total + "원");
+
+            System.out.println("\n1. 주문 확정      2. 메인으로 돌아가기");
+            int num = numInput();
+            if (num == 1) {
+                System.out.println("주문이 완료되었습니다! 총 금액: " + total + "원");
+                setStock();
+                cartItems.clear();
+                return;
+            } else if (num == 2) {
+                System.out.println("메인으로 돌아갑니다.");
+                return;
+            } else {
+                System.out.println("보기에 있는 숫자 중에 눌러주세요");
+            }
+        }
+    }
+}//CommerceSystem
