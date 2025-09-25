@@ -156,7 +156,7 @@ public class CommerceSystem {
     }
 
     public long total() {
-        long totalPrice = 0;
+        long totalPrice  = 0;
         for (CartItem item : cartItems) {
             Product product = item.getProduct();
             int quantity = item.getQuantity();
