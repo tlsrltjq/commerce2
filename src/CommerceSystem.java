@@ -157,7 +157,7 @@ public class CommerceSystem {
 
                     for (int k = 3; k > 0; k--) {
                         String pw = sc.nextLine();
-                        if (pw.equals("admin123")) {
+                        if (pw.equals("")) { //나중에 admin123 추가
                             adminMode();
                             break;
                         } else {
@@ -230,6 +230,8 @@ public class CommerceSystem {
         int i = numInput();
         int j = 0;
         switch (i) {
+            case 0:
+                break;
             case 1:
                 System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
                 for (Category category : categories) {
@@ -250,25 +252,82 @@ public class CommerceSystem {
                 System.out.print("재고수량을 입력해주세요: ");
                 int stock = numInput();
 
-                System.out.println(name + " | " + price + " | " + exp + " | 재고: " + stock + "개");
-                System.out.println("위 정보로 상품을 추가하시겠습니까?");
-                System.out.println("1. 확인    2. 취소");
-                i = numInput();
-                if (i == 1) {
-                    System.out.println("상품이 성공적으로 추가되었습니다!");
-                    categories.get(index).getProducts().add(new Product(name, price, exp, stock));
-                    adminMode();
-                } else if (i == 2) {
-                    System.out.println("상품 등록을 취소합니다.");
-                    adminMode();
-                } else{
-                    System.out.println("보기에 있는 숫자 중에 눌러주세요");
+                while (true) {
+                    System.out.println(name + " | " + price + " | " + exp + " | 재고: " + stock + "개");
+                    System.out.println("위 정보로 상품을 추가하시겠습니까?");
+                    System.out.println("1. 확인    2. 취소");
+                    i = numInput();
+                    if (i == 1) {
+                        System.out.println("상품이 성공적으로 추가되었습니다!");
+                        categories.get(index).getProducts().add(new Product(name, price, exp, stock));
+                        adminMode();
+                        return;
+                    } else if (i == 2) {
+                        System.out.println("상품 등록을 취소합니다.");
+                        adminMode();
+                        return;
+                    } else {
+                        System.out.println("보기에 있는 숫자 중에 눌러주세요");
+                    }
                 }
-        }
+
+            case 2:
+                System.out.print("수정할 상품명을 입력해주세요: ");
+                String updateName = sc.nextLine();
+
+                for (Category category : categories) {
+                    for (Product product : category.getProducts()) {
+                        if (updateName.equals(product.getName())) {
+                            System.out.println("현재 상품 정보: " + product + " | 재고: " + product.getStock() + "개");
+                            System.out.println("\n수정할 항목을 선택해주세요:");
+                            System.out.println("1. 가격");
+                            System.out.println("2. 설명");
+                            System.out.println("3. 재고수량");
+                            while (true) {
+                                int k = numInput();
+                                switch (k) {
+                                    case 1:
+                                        System.out.println("현재 가격: " + product.getPrice());
+                                        System.out.print("새로운 가격을 입력해주세요: ");
+                                        String newPrice = sc.nextLine();
+                                        System.out.print(product.getName() + "의 가격이 " + product.getPrice());
+                                        newPrice = transPrice(newPrice);
+                                        product.setPrice(newPrice);
+                                        System.out.println(" → " + product.getPrice() + "으로 수정되었습니다.");
+                                        adminMode();
+                                        return;
+                                    default:
+                                        System.out.println("보기에 있는 숫자 중에 눌러주세요");
+
+                                }//switch
+                            }//while
+                        } //If
+                    }//for
+                }//for
+                System.out.println("입력한 제품 '" + updateName + "'을 찾을 수 없습니다.");
+                adminMode();
+                break;
+
+            case 3:
+                System.out.print("삭제할 상품명을 입력해주세요: ");
+                String delName = sc.nextLine();
+
+                for (Category category : categories) {
+                    if (category.getProducts().removeIf(product -> product.getName().equals(delName))) {
+                        System.out.println(delName + " 상품이 삭제되었습니다." + category.getName());
+                        adminMode();
+                        return;
+                    }
+                }
+                System.out.println("해당 상품을 찾을 수 없습니다.");
+                adminMode();
+                return;
+        }//switch
     }
 
-    public String transPrice(Object value) {
 
+    //숫자 변환기 : 세자리마다 ',' 붙여주는 메서드
+    public String transPrice(Object value) {
         DecimalFormat df = new DecimalFormat("#,###");
         if (value instanceof Integer) {
             return df.format((Integer) value) + "원";
