@@ -139,9 +139,17 @@ public class CommerceSystem {
                     else selectProduct(categories.get(index), pNum2);
                     break;
                 case 4:
+                    if (cartItems.isEmpty()) {
+                        System.out.println("보기에 있는 숫자 중에 눌러주세요");
+                        break;
+                    }
                     order();
                     break;
                 case 5:
+                    if (cartItems.isEmpty()) {
+                        System.out.println("보기에 있는 숫자 중에 눌러주세요");
+                        break;
+                    }
                     cartItems.clear();
                     break;
                 default:
