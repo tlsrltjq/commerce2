@@ -125,7 +125,9 @@ public class CommerceSystem {
         }
         System.out.println("0. 종료      | 프로그램 종료");
         System.out.println("6. 관리자 모드");
-        if (cartItems.size() > 0) { orderManagement(); } //장바구니 리스트에 값이 있으면 주문관리 출력
+        if (cartItems.size() > 0) {
+            orderManagement();
+        } //장바구니 리스트에 값이 있으면 주문관리 출력
 
         int pNum = numInput();
         if (pNum == 0) {
@@ -162,7 +164,9 @@ public class CommerceSystem {
                         if (pw.equals("admin123")) {
                             adminMode();
                             break;
-                        } else { System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요. " + (k - 1) + "번 남음"); }
+                        } else {
+                            System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요. " + (k - 1) + "번 남음");
+                        }
                     }
                     break;
                 default:
@@ -300,6 +304,26 @@ public class CommerceSystem {
                                         System.out.println(" → " + product.getPrice() + "으로 수정되었습니다.");
                                         adminMode();
                                         return;
+                                    case 2:
+                                        System.out.println("현재 설명: " + product.getExp());
+                                        System.out.println("새로운 설명을 입력해주세요: ");
+                                        String newExp = sc.nextLine();
+                                        System.out.println();
+                                        System.out.print(product.getName() + "의 설명이 '" + product.getExp());
+                                        product.setExp(newExp);
+                                        System.out.println("' → '" + product.getExp() + "'으로 수정되었습니다.");
+                                        adminMode();
+                                        return;
+                                    case 3:
+                                        System.out.println("현재 재고: " + product.getStock() + "개");
+                                        System.out.println("재고를 설정해주세요: ");
+                                        int newStock = numInput();
+                                        System.out.println();
+                                        System.out.print(product.getName() + "의 재고가 " + product.getStock());
+                                        product.setStock(newStock);
+                                        System.out.println(" → " + product.getStock() + "으로 수정되었습니다.");
+                                        adminMode();
+                                        return;
                                     default:
                                         System.out.println("보기에 있는 숫자 중에 눌러주세요");
 
@@ -330,7 +354,7 @@ public class CommerceSystem {
                 for (Category category : categories) {
                     System.out.println("[ " + category.getName() + " 카테고리 ]");
                     for (Product product : category.getProducts()) {
-                        System.out.println(product + " | 재고: "  + product.getStock());
+                        System.out.println(product + " | 재고: " + product.getStock());
                     }
                 }
                 adminMode();

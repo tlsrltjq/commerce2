@@ -19,8 +19,10 @@ public class Product {
     public String getName() { return name; }
     public String getPrice() { return price; }
     public int getStock() { return stock; }
+    public String getExp() { return exp; }
 
     public void setStock(int stock) { this.stock = stock; }
     public void setName(String name) { this.name = name; }
+    public void setExp(String exp) { this.exp = exp; }
     public void setPrice(String price) { this.price = price; }
 }
