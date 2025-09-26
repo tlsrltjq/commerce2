@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -26,12 +25,14 @@ public class CommerceSystem {
         categories.add(clothes);
     }
 
+    //커머스 시스템 시작
     public void start() {
         while (true) {
             commerceMainMenu();
         }
     }
 
+    //카테고리 인덱스 받아서 제품 리스트 출력
     public void productList(int index) {
         System.out.println("\n[ " + categories.get(index).getName() + " 카테고리 ]");
         int j = 1;
@@ -42,6 +43,7 @@ public class CommerceSystem {
         System.out.println("0. 뒤로가기");
     }
 
+    //상품 선택
     public void selectProduct(Category category, int i) {
         int index = i - 1;
         int listSize = category.getProducts().size();
@@ -60,6 +62,7 @@ public class CommerceSystem {
         }
     }
 
+    //숫자 입력 받기
     public int numInput() {
         try {
             System.out.print(":");
@@ -73,6 +76,7 @@ public class CommerceSystem {
         }
     }
 
+    //장바구니에 추가
     public boolean confirmAddToCart(Product product) {
         while (true) {
             System.out.println(product);
@@ -90,9 +94,11 @@ public class CommerceSystem {
             } else {
                 System.out.println("보기에 숫자를 입력해주세요.");
             }
-        }
+        }//while
     }
 
+
+    //장바구니 리스트 출력
     public void cartItemList() {
         System.out.println("[ 장바구니 내역 ]");
         int i = 1;
@@ -102,12 +108,14 @@ public class CommerceSystem {
         }
     }
 
+    //주문관리 텍스트
     public void orderManagement() {
         System.out.println("\n[ 주문 관리 ]");
         System.out.println("4. 장바구니 확인    | 장바구니를 확인 후 주문합니다.");
         System.out.println("5. 주문 취소       | 진행중인 주문을 취소합니다(장바구니 초기화)");
     }
 
+    //커머스 시스템 메인
     public void commerceMainMenu() {
         int i = 0;
         System.out.println("\n[ 실시간 커머스 플랫폼 메인 ]");
@@ -115,13 +123,9 @@ public class CommerceSystem {
             System.out.println((i + 1) + ". " + category.getName());
             i++;
         }
-
         System.out.println("0. 종료      | 프로그램 종료");
         System.out.println("6. 관리자 모드");
-
-        if (cartItems.size() > 0) {
-            orderManagement();
-        }
+        if (cartItems.size() > 0) { orderManagement(); } //장바구니 리스트에 값이 있으면 주문관리 출력
 
         int pNum = numInput();
         if (pNum == 0) {
@@ -130,39 +134,35 @@ public class CommerceSystem {
             System.exit(0);
         } else {
             switch (pNum) {
-                case 1, 2, 3:
+                case 1, 2, 3:   //카테고리 선택
                     int index = pNum - 1;
                     productList(index);
                     int pNum2 = numInput();
-
                     if (pNum2 == 0) commerceMainMenu();
                     else selectProduct(categories.get(index), pNum2);
                     break;
-                case 4:
+                case 4:     //주문관리 - 장바구니 확인
                     if (cartItems.isEmpty()) {
                         System.out.println("보기에 있는 숫자 중에 눌러주세요");
                         break;
                     }
                     order();
                     break;
-                case 5:
+                case 5:     //주문관리 - 주문취소
                     if (cartItems.isEmpty()) {
                         System.out.println("보기에 있는 숫자 중에 눌러주세요");
                         break;
                     }
                     cartItems.clear();
                     break;
-                case 6:
+                case 6:     //관리자 모드
                     System.out.println("관리자 비밀번호를 입력해주세요:");
-
                     for (int k = 3; k > 0; k--) {
                         String pw = sc.nextLine();
-                        if (pw.equals("")) { //나중에 admin123 추가
+                        if (pw.equals("admin123")) {
                             adminMode();
                             break;
-                        } else {
-                            System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요. " + (k - 1) + "번 남음");
-                        }
+                        } else { System.out.println("비밀번호가 틀렸습니다. 다시 입력해주세요. " + (k - 1) + "번 남음"); }
                     }
                     break;
                 default:
@@ -171,6 +171,7 @@ public class CommerceSystem {
         }//else
     }
 
+    //장바구니에 있는 제품 총합 가격 구하기
     public long total() {
         long totalPrice = 0;
         for (CartItem item : cartItems) {
@@ -183,6 +184,7 @@ public class CommerceSystem {
         return totalPrice;
     }
 
+    //재고 차감
     public void setStock() {
         for (CartItem item : cartItems) {
             Product product = item.getProduct();
@@ -193,6 +195,7 @@ public class CommerceSystem {
         }
     }
 
+    //주문 확인 및 확정
     public void order() {
         while (true) {
             System.out.println("아래와 같이 주문 하시겠습니까?");
@@ -219,6 +222,7 @@ public class CommerceSystem {
         }//while
     }
 
+    //관리자 모드
     public void adminMode() {
         System.out.println("[ 관리자 모드 ]");
         System.out.println("1. 상품 추가");
@@ -232,7 +236,7 @@ public class CommerceSystem {
         switch (i) {
             case 0:
                 break;
-            case 1:
+            case 1:     //상품 추가
                 System.out.println("어느 카테고리에 상품을 추가하시겠습니까?");
                 for (Category category : categories) {
                     System.out.println((j + 1) + ". " + category.getName());
@@ -271,7 +275,7 @@ public class CommerceSystem {
                     }
                 }
 
-            case 2:
+            case 2:     //상품 수정
                 System.out.print("수정할 상품명을 입력해주세요: ");
                 String updateName = sc.nextLine();
 
@@ -308,7 +312,7 @@ public class CommerceSystem {
                 adminMode();
                 break;
 
-            case 3:
+            case 3:     //상품 삭제
                 System.out.print("삭제할 상품명을 입력해주세요: ");
                 String delName = sc.nextLine();
 
@@ -322,7 +326,7 @@ public class CommerceSystem {
                 System.out.println("해당 상품을 찾을 수 없습니다.");
                 adminMode();
 
-            case 4:
+            case 4:     //모든 카테고리 + 제품 리스트 출력
                 for (Category category : categories) {
                     System.out.println("[ " + category.getName() + " 카테고리 ]");
                     for (Product product : category.getProducts()) {
@@ -338,7 +342,7 @@ public class CommerceSystem {
     }
 
 
-    //숫자 변환기 : 세자리마다 ',' 붙여주는 메서드
+    //숫자 변환기 : 세자리마다 ',' 붙여줌
     public String transPrice(Object value) {
         DecimalFormat df = new DecimalFormat("#,###");
         if (value instanceof Integer) {
