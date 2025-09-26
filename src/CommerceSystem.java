@@ -321,7 +321,19 @@ public class CommerceSystem {
                 }
                 System.out.println("해당 상품을 찾을 수 없습니다.");
                 adminMode();
+
+            case 4:
+                for (Category category : categories) {
+                    System.out.println("[ " + category.getName() + " 카테고리 ]");
+                    for (Product product : category.getProducts()) {
+                        System.out.println(product + " | 재고: "  + product.getStock());
+                    }
+                }
+                adminMode();
                 return;
+            default:
+                System.out.println("보기에 있는 숫자 중에 눌러주세요");
+                adminMode();
         }//switch
     }
 
