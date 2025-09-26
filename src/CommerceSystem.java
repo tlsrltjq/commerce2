@@ -52,8 +52,13 @@ public class CommerceSystem {
             return;
         }
         Product select = category.getProducts().get(index);
-        System.out.println("선택한 상품 : " + select + " | 남은 재고: " + select.getStock() + "개\n");
-        confirmAddToCart(select);
+
+        if(select.getStock() > 0){
+            System.out.println("선택한 상품 : " + select + " | 남은 재고: " + select.getStock() + "개\n");
+            confirmAddToCart(select);
+        } else {
+            System.out.println("선택한 상품 : " + select.getName() + "의 재고가 남지않았습니다.");
+        }
     }
 
     public int numInput() {
@@ -75,22 +80,16 @@ public class CommerceSystem {
             System.out.println("위 상품을 장바구니에 추가하시겠습니까?");
             System.out.println("1. 확인       2. 취소");
             System.out.print(":");
-            try {
-                int pNum3 = sc.nextInt();
-                sc.nextLine();
-                if (pNum3 == 1) {
-                    cartItems.add(new CartItem(product, 1));
-                    System.out.println(product.getName() + "이(가) 장바구니에 추가되었습니다.");
-                    return true;
-                } else if (pNum3 == 2) {
-                    return false;
-                } else {
-                    System.out.println("보기에 숫자를 입력해주세요.");
-                }
-            } catch (InputMismatchException e) {
-                System.err.println("숫자만 입력해야 합니다. 잘못된 입력입니다.");
-                sc.nextLine();
-                return confirmAddToCart(product);
+
+            int i = numInput();
+            if (i == 1) {
+                cartItems.add(new CartItem(product, 1));
+                System.out.println(product.getName() + "이(가) 장바구니에 추가되었습니다.");
+                return true;
+            } else if (i == 2) {
+                return false;
+            } else {
+                System.out.println("보기에 숫자를 입력해주세요.");
             }
         }
     }
